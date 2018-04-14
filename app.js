@@ -1,7 +1,7 @@
 /**
  * 抓取拉钩简历主线程
  */
-const userDao = require('./dbo/UserDao');
+const userDao = require('./dao/UserDao');
 const dbUtil = require('./tool/DbUtil');
 const fileUtil = require("./tool/FileUtil");
 const app = require("./config/app");
