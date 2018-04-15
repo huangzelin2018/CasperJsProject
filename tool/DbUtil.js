@@ -1,8 +1,8 @@
-const mysql = require("mysql");
+var mysql = require("mysql");
 var cfg = require("../config/db");
 var pool = mysql.createPool(cfg);
 
-const dbUtil = {
+var dbUtil = {
     /**
      * 导出查询相关
      * @param sql

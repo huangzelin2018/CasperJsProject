@@ -1,10 +1,11 @@
 /**
  * 抓取拉钩简历详情
  */
-const util = require("./tool/Util");
-const fs = require("./tool/FileUtil");
-const app = require("./config/app");
-const system = require('system');
+var util = require("./tool/Util");
+var fileUtil = require("./tool/FileUtil");
+var fs = require("fs");
+var app = require("./config/app");
+var system = require('system');
 
 var url = system.args[4];
 var number = util.getQueryParam(url);
@@ -12,10 +13,11 @@ var number = util.getQueryParam(url);
 var casper = require('casper').create({
     // clientScripts: ["jquery.js"],
     verbose: false,
-    // logLevel: 'debug',
+    logLevel: 'debug',
     pageSettings: {
         loadImages: false, // The WebPage instance used by Casper will
-        loadPlugins: false // use these settings
+        loadPlugins: false, // use these settings
+        userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:23.0) Gecko/20130404 Firefox/23.0"
     }
 });
 
@@ -31,16 +33,21 @@ casper.wait(5000, function () {
         var style = "<style>.mobile{display:block;}.email{display:block;}</style>";
         data = style + html;
     }
-    if (!data) {
+
+    if (data) {
+        fileUtil.write(app.htmlPath(number + "_text"), data);
+        fileUtil.write(app.htmlPath(number + "_html"), this.getHTML());
+    } else {
+        var path = app.errorPath(number);
         var logErr = {
-            msg: 'no data',
+            msg: "获取不到数据",
+            path: path,
             url: url
         }
-        fs.log(JSON.stringify(logErr));
+        fileUtil.log(JSON.stringify(logErr));
+        fileUtil.write(path, this.getHTML());
         console.error("error");//结束子进程
-        return false;
     }
-    fs.write(app.htmlPath(number), data);
 
 })
 
