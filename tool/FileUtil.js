@@ -21,11 +21,8 @@ var fileUtil = {
     write: function (filePath, data) {
         fs.write(filePath, data, 'w');
     },
-    append:function(path,data){
-        data=data+ '\r\n';
-        fs.appendFile(path,data, function () {
-            // console.log('追加内容完成');
-        });
+    append: function (filePath, data) {
+        fs.write(filePath, data, 'a');
     },
     log: function (data) {
         var time = '[ ' + date.getDate('yyyy-MM-dd hh:mm:ss') + ' ] ' + '\r\n';
