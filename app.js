@@ -23,10 +23,6 @@ function capture(rows) {
             var msg = '没有获取到数据。目标：' + rows.url;
             fileUtil.append(app.logPath(), msg);
             // child_process.kill();
-        } else {
-            lagouService.update_resume(rows,function(){
-                // child_process.kill();
-            });
         }
 
 

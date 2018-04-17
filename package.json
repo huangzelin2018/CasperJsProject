@@ -9,36 +9,29 @@
   "license": "ISC",
   "dependencies": {
     "_bignumber.js@4.0.4@bignumber.js": "^4.0.4",
-    "_inherits@2.0.3@inherits": "^2.0.3",
     "_core-util-is@1.0.2@core-util-is": "^1.0.2",
+    "_inherits@2.0.3@inherits": "^2.0.3",
     "_isarray@1.0.0@isarray": "^1.0.0",
     "_mysql@2.15.0@mysql": "^2.15.0",
+    "_process-nextick-args@1.0.7@process-nextick-args": "^1.0.7",
     "_readable-stream@2.3.3@readable-stream": "^2.3.3",
     "_safe-buffer@5.1.1@safe-buffer": "^5.1.1",
-    "_process-nextick-args@1.0.7@process-nextick-args": "^1.0.7",
     "_sqlstring@2.3.0@sqlstring": "^2.3.0",
     "_string_decoder@1.0.3@string_decoder": "^1.0.3",
     "_util-deprecate@1.0.2@util-deprecate": "^1.0.2",
     "bignumber.js": "^4.0.4",
     "core-util-is": "^1.0.2",
     "inherits": "^2.0.3",
+    "isarray": "^1.0.0",
     "mysql": "^2.15.0",
     "process-nextick-args": "^1.0.7",
     "readable-stream": "^2.3.3",
     "safe-buffer": "^5.1.1",
-    "string_decoder": "^1.0.3",
-    "isarray": "^1.0.0",
     "sqlstring": "^2.3.0",
+    "string_decoder": "^1.0.3",
+    "system": "^2.0.1",
     "util-deprecate": "^1.0.2"
   },
   "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/huangzelin2018/CasperJsProject.git"
-  },
-  "bugs": {
-    "url": "https://github.com/huangzelin2018/CasperJsProject/issues"
-  },
-  "homepage": "https://github.com/huangzelin2018/CasperJsProject#readme",
   "description": ""
 }

@@ -12,7 +12,13 @@ var cfg = {
         return util.format(constant.ERROR_HTML_PATH, code);
     },
     getResumeApi: function (code) {
-        return util.format(constant.RESUME_API, code);
+        return util.format(constant.GET_RESUME_API, code);
+    },
+    postResumeApi: function () {
+        return constant.LAGOU_RESUME_API.POST_API;
+    },
+    getLagouApi: function () {
+        return constant.LAGOU_RESUME_API.GET_API;
     },
 }
 
