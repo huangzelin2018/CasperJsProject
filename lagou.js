@@ -6,7 +6,7 @@ var util = require('util');
 var fileUtil = require("./tool/FileUtil");
 var app = require("./config/app");
 var index = 0;
-var resultList=[];
+var resultList = [];
 
 var casper = require('casper').create({
     verbose: true,
@@ -36,12 +36,12 @@ get(app.getLagouApi(), function (res) {
 
 
 // casper开始运行
-casper.run(function() {
-    if(resultList.length>0){
+casper.run(function () {
+    if (resultList.length > 0) {
         fileUtil.log(JSON.stringify(resultList));
         // post(app.postResumeApi(), {"list":JSON.stringify(resultList)});
     }
-    this.echo('Done.'+resultList.length).exit();
+    this.echo('Done.' + resultList.length).exit();
 });
 
 /**
@@ -50,7 +50,7 @@ casper.run(function() {
 function snatchResume(vo) {
     casper.open(vo.url);
     casper.wait(5000, function () {
-        step1(vo,this);
+        step1(vo, this);
     });
 }
 
@@ -58,15 +58,15 @@ function snatchResume(vo) {
  * 获取简历详情
  * 直接通过拉钩接口拿简历
  */
-function step1(vo,casperObj) {
-    var data = util.format("<img src='https://easy.lagou.com/can/share/image/%s/page_image_0.pnga' style='width:780px;'>",vo.code);
-    step2(vo,casperObj,data);
+function step1(vo, casperObj) {
+    var data = util.format("<img src='https://easy.lagou.com/can/share/image/%s/page_image_0.pnga' style='width:780px;'>", vo.code);
+    step2(vo, casperObj, data);
 }
 
 /**
  * 清洗数据
  */
-function step2(vo,casperObj,detaliInfo) {
+function step2(vo, casperObj, detaliInfo) {
     var pageHtml = casperObj.getHTML();
     //匹配页面内容的数据
     var regx = /itemData\s*=(.*?);\s*var\s*haveInterview/;
@@ -107,28 +107,42 @@ function step3(vo) {
         vo.addrss = expectJob.city;//工作地点或者城市
         //删除不必要属性
         var keys = ["url", "code", "id"];
-        keys.forEach(function(item) {delete vo[item]});
+        keys.forEach(function (item) {
+            delete vo[item]
+        });
         resultList.push(vo);
         post(app.postResumeApi(), vo);
     });
 }
 
+var option = {
+    // host: 'ip',
+    // port: 'ports',
+    method: 'GET',
+    timeout: 10000,
+    headers: {
+        'scheme': 'https',
+        'version': 'HTTP/1.1',
+        'Accept': 'application/json',
+        'Accept-Encoding': 'deflate, sdch',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Cache-Control': 'no-cache',
+        'connection': 'keep-alive',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36'
+    }
+}
+
 function get(url, callback) {
-    casper.open(url, {
-        method: 'get',
-        headers: {
-            'Accept': 'application/json'
-        }
-    }).then(function (response) {
+    casper.open(url,option).then(function (response) {
         if (response.status != 200) {
             var msg = util.format("msg：获取不了接口数据\r\nurl：%s\r\n", url);
             fileUtil.append(app.logPath(), msg);
             return false;
         }
-        try{
+        try {
             var returnObj = JSON.parse(this.getPageContent());
             callback(returnObj);
-        }catch(err){
+        } catch (err) {
 
         }
     });
