@@ -1,10 +1,10 @@
 /**
  * 抓取拉钩简历详情
  */
-var tool = require("./tool/Util");
+var tool = require("../tool/Util");
 var util = require('util');
-var fileUtil = require("./tool/FileUtil");
-var app = require("./config/app");
+var fileUtil = require("../tool/FileUtil");
+var app = require("../config/app");
 
 var index = 0
 
