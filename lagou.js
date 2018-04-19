@@ -6,7 +6,6 @@ var util = require('util');
 var fileUtil = require("./tool/FileUtil");
 var app = require("./config/app");
 var index = 0;
-var resultList = [];
 
 var casper = require('casper').create({
     verbose: true,
@@ -36,13 +35,7 @@ get(app.getLagouApi(), function (res) {
 
 
 // casper开始运行
-casper.run(function () {
-    if (resultList.length > 0) {
-        fileUtil.log(JSON.stringify(resultList));
-        // post(app.postResumeApi(), {"list":JSON.stringify(resultList)});
-    }
-    this.echo('Done.' + resultList.length).exit();
-});
+casper.run();
 
 /**
  * 抓取简历
@@ -59,8 +52,30 @@ function snatchResume(vo) {
  * 直接通过拉钩接口拿简历
  */
 function step1(vo, casperObj) {
-    var data = util.format("<img src='https://easy.lagou.com/can/share/image/%s/page_image_0.pnga' style='width:780px;'>", vo.code);
+
+    var data = '';
+    if (casperObj.exists('div.text-layer')) {
+        var html = casperObj.getHTML('div.left-content');
+        data = tool.filterHtml(html);
+    } else if (casperObj.exists('div.online-preview')) {
+        var html = casperObj.getHTML('div.online-preview');
+        var style = "<style>.mobile{display:block;}.email{display:block;}</style>";
+        data = style + tool.filterImgTag(html);
+    } else {
+        data = util.format("<img src='https://easy.lagou.com/can/share/image/%s/page_image_0.pnga' style='width:780px;'>", vo.code);
+        var pageHtml = casperObj.getHTML();
+        var path = app.errorPath(vo.code);
+        var logErr = {
+            msg: "获取不到数据,查看是否规则变了？",
+            path: path,
+            url: vo.url
+        }
+        fileUtil.log(JSON.stringify(logErr));
+        fileUtil.write(path, pageHtml);
+    }
+
     step2(vo, casperObj, data);
+
 }
 
 /**
@@ -106,11 +121,10 @@ function step3(vo) {
         vo.salary = expectJob.salarys;//期望薪资
         vo.addrss = expectJob.city;//工作地点或者城市
         //删除不必要属性
-        var keys = ["url", "code", "id"];
+        var keys = ["url", "code"];
         keys.forEach(function (item) {
             delete vo[item]
         });
-        resultList.push(vo);
         post(app.postResumeApi(), vo);
     });
 }
@@ -133,7 +147,7 @@ var option = {
 }
 
 function get(url, callback) {
-    casper.open(url,option).then(function (response) {
+    casper.open(url, option).then(function (response) {
         if (response.status != 200) {
             var msg = util.format("msg：获取不了接口数据\r\nurl：%s\r\n", url);
             fileUtil.append(app.logPath(), msg);
